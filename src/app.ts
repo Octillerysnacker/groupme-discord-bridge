@@ -6,7 +6,7 @@ import { DiscordClient } from './client/DiscordClient';
 import { GroupMeChannel } from './channel/GroupMeChannel';
 import { GroupMeClient } from './client/GroupMeClient';
 import { ErrorHandler } from './util/ErrorHandler';
-
+import * as http from 'http';
 let linker : ChannelLinker;
 
 let errorHandler : ErrorHandler = console.error;
@@ -35,5 +35,11 @@ let errorHandler : ErrorHandler = console.error;
         // ... link the two channels on the bridge
         await linker.link(discordChannelId, groupMeChannelId);
     }));
+
+    //respond to pings for azure
+    http.createServer(function (req, res){
+        res.writeHead(200);
+        res.end("We good!");
+    }).listen(8080);
 
 })().catch(errorHandler);
