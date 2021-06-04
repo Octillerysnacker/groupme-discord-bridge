@@ -14,7 +14,7 @@ let errorHandler : ErrorHandler = console.error;
 (async ()=>{
 
     // initialize the clients
-    let groupMeClient = new GroupMeClient(config.listenPort, config.groupme.callbackURL, errorHandler);
+    let groupMeClient = new GroupMeClient(parseInt(process.env.PORT) || config.listenPort, config.groupme.callbackURL, errorHandler);
     let discordClient = await DiscordClient.connect(config.discord.token, errorHandler);
 
     linker = new ChannelLinker(discordClient, groupMeClient);
@@ -36,10 +36,6 @@ let errorHandler : ErrorHandler = console.error;
         await linker.link(discordChannelId, groupMeChannelId);
     }));
 
-    //respond to pings for azure
-    http.createServer(function (req, res){
-        res.writeHead(200);
-        res.end("We good!");
-    }).listen(8080);
+
 
 })().catch(errorHandler);
