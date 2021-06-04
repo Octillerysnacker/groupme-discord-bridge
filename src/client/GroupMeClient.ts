@@ -1,5 +1,3 @@
-const express = require("express");
-const bodyParser = require("body-parser");
 import { Express, RequestHandler } from 'express';
 import { AttachmentData, attachmentIsImage } from '../channel/Attachment';
 import { GenericClient } from './GenericClient';
@@ -15,20 +13,18 @@ export class GroupMeClient extends GenericClient<GroupMeChannel>{
     private expressApp: Express;
 
 
-    /** @param port the port to listen for messages on
+    /** 
+     * @param expressApp the express erver to use
      * @param callbackURL the local URL that GroupMe will send messages to */
-    constructor(port: Number, callbackURL: string, errorHandler:ErrorHandler) {
+    constructor(expressApp: Express, callbackURL: string, errorHandler:ErrorHandler) {
         super();
-        
-        // create the listening server
-        this.expressApp = express();
-        this.expressApp.use(bodyParser.json());
-        this.expressApp.listen(port, () => console.log("Listening for GroupMe messages on port " + port));
 
+        this.expressApp = expressApp;
         // await each new message from the GroupMe server
         this.expressApp.post(callbackURL, (req, res) => {
             this.handleIncomingMessage(req).catch(errorHandler);
         });
+        console.log("Enabled GroupMe callback on " + callbackURL);
     }
 
     /** called any time anybody sends a message on any groupme group our bots are in */
