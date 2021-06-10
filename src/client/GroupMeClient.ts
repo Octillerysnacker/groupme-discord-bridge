@@ -34,7 +34,7 @@ export class GroupMeClient extends GenericClient<GroupMeChannel>{
         let channelId = req.body.group_id;
 
         // we don't want bot messages! (otherwise there'd be an infinite loop :o)
-        if (req.body.sender_type == "bot" || req.body.system)
+        if (req.body.sender_type == "bot" )//|| req.body.system)
             return;
 
         // make sure that the channel exists in our system
